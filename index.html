@@ -1,626 +1,1104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>M.awajilivescores</title>
+<title>M.awajilivescores</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+:root {
+  --dark: #071426;
+  --dark2: #0d2038;
+  --blue: #08b9f5;
+  --blue2: #087ee8;
+  --red: #ef233c;
+  --green: #16c784;
+  --text: #102033;
+  --muted: #718096;
+  --bg: #f3f6fa;
+  --white: #ffffff;
+  --border: #e5eaf0;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #111827;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    header {
-      background: #111827;
-      color: white;
-      padding: 18px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-    .header-inner {
-      max-width: 900px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* HEADER */
 
-    .logo {
-      font-size: 21px;
-      font-weight: bold;
-    }
+header {
+  background: linear-gradient(135deg, #061221, #0d2948);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 15px rgba(0,0,0,.15);
+}
 
-    .live-badge {
-      background: #dc2626;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+.header {
+  max-width: 1100px;
+  margin: auto;
+  min-height: 72px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    nav {
-      background: white;
-      border-bottom: 1px solid #ddd;
-      position: sticky;
-      top: 62px;
-      z-index: 9;
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
 
-    .nav-inner {
-      max-width: 900px;
-      margin: auto;
-      display: flex;
-      overflow-x: auto;
-    }
+.logo-mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 900;
+  box-shadow: 0 5px 18px rgba(8,185,245,.3);
+}
 
-    .nav-button {
-      border: none;
-      background: none;
-      padding: 15px 18px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #6b7280;
-      cursor: pointer;
-      white-space: nowrap;
-    }
+.brand-name {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -.7px;
+}
 
-    .nav-button.active {
-      color: #111827;
-      border-bottom: 3px solid #111827;
-    }
+.brand-name span {
+  color: var(--blue);
+}
 
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px 12px 50px;
-    }
+.tagline {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #aebed0;
+  margin-top: 3px;
+}
 
-    .page-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(239,35,60,.14);
+  border: 1px solid rgba(239,35,60,.4);
+  color: #ff6172;
+  padding: 8px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
 
-    .date {
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse 1.3s infinite;
+}
 
-    .status-box {
-      background: white;
-      border-radius: 12px;
-      padding: 25px 18px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+@keyframes pulse {
+  50% { opacity: .35; }
+}
 
-    .status-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+/* NAVIGATION */
 
-    .status-text {
-      color: #6b7280;
-      font-size: 14px;
-      line-height: 1.5;
-    }
+nav {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 72px;
+  z-index: 90;
+}
 
-    .retry-button {
-      margin-top: 18px;
-      border: none;
-      background: #111827;
-      color: white;
-      padding: 11px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.nav {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
 
-    .league {
-      margin-bottom: 15px;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+.nav::-webkit-scrollbar {
+  display: none;
+}
 
-    .league-header {
-      background: #111827;
-      color: white;
-      padding: 12px 15px;
-      font-weight: bold;
-      font-size: 14px;
-    }
+.nav button {
+  border: 0;
+  background: transparent;
+  padding: 15px 18px;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
-    .match {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-    }
+.nav button.active {
+  color: var(--blue2);
+  border-bottom: 3px solid var(--blue);
+}
 
-    .match:last-child {
-      border-bottom: none;
-    }
+/* MAIN */
 
-    .team {
-      width: 35%;
-      font-size: 14px;
-      font-weight: 600;
-    }
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 22px 13px 50px;
+}
 
-    .team.home {
-      text-align: right;
-    }
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 18px;
+}
 
-    .team.away {
-      text-align: left;
-    }
+.page-title {
+  font-size: 25px;
+  font-weight: 900;
+}
 
-    .score {
-      width: 20%;
-      text-align: center;
-      font-weight: bold;
-    }
+.page-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 5px;
+}
 
-    .score-number {
-      font-size: 18px;
-    }
+.refresh {
+  border: 0;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 9px 13px;
+  border-radius: 9px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .match-status {
-      font-size: 11px;
-      color: #dc2626;
-      margin-top: 4px;
-    }
+/* DATE BAR */
 
-    footer {
-      text-align: center;
-      padding: 25px 15px;
-      color: #6b7280;
-      font-size: 12px;
-    }
+.date-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  scrollbar-width: none;
+}
 
-    @media (min-width: 700px) {
-      main {
-        padding-top: 30px;
-      }
-    }
-  </style>
+.date-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.date-btn {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 75px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.date-btn strong {
+  display: block;
+  font-size: 12px;
+}
+
+.date-btn small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.date-btn.active {
+  background: var(--dark2);
+  color: white;
+}
+
+/* STATUS */
+
+.status {
+  background: white;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  padding: 35px 18px;
+  text-align: center;
+}
+
+.status-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.status h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.status p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.retry {
+  margin-top: 17px;
+  background: var(--dark2);
+  color: white;
+  border: 0;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* LEAGUE */
+
+.league {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.league-header {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.league-name {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.league-country {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.match {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  padding: 17px 13px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.match:last-child {
+  border-bottom: 0;
+}
+
+.team {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.home {
+  text-align: right;
+}
+
+.away {
+  text-align: left;
+}
+
+.score {
+  text-align: center;
+}
+
+.score-main {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.status-live {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.status-finished {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+/* LOADING */
+
+.loading {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 35px;
+}
+
+.loading span {
+  width: 8px;
+  height: 8px;
+  background: var(--blue);
+  border-radius: 50%;
+  animation: load .8s infinite alternate;
+}
+
+.loading span:nth-child(2) {
+  animation-delay: .2s;
+}
+
+.loading span:nth-child(3) {
+  animation-delay: .4s;
+}
+
+@keyframes load {
+  to { transform: translateY(-8px); opacity: .3; }
+}
+
+/* FOOTER */
+
+footer {
+  background: var(--dark);
+  color: #8ea2b8;
+  text-align: center;
+  padding: 28px 15px;
+  font-size: 11px;
+}
+
+.footer-brand {
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.footer-brand span {
+  color: var(--blue);
+}
+
+/* DESKTOP */
+
+@media (min-width: 700px) {
+  main {
+    padding-top: 30px;
+  }
+
+  .match {
+    padding: 19px 22px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <div class="header-inner">
+<header>
+  <div class="header">
 
-      <div class="logo">
-        M.awajilivescores
+    <div class="brand">
+
+      <div class="logo-mark">
+        M
       </div>
 
-      <div class="live-badge">
-        LIVE
-      </div>
-
-    </div>
-  </header>
-
-  <nav>
-    <div class="nav-inner">
-
-      <button
-        class="nav-button active"
-        onclick="showPage('live', this)">
-        Live
-      </button>
-
-      <button
-        class="nav-button"
-        onclick="showPage('fixtures', this)">
-        Fixtures
-      </button>
-
-      <button
-        class="nav-button"
-        onclick="showPage('results', this)">
-        Results
-      </button>
-
-      <button
-        class="nav-button"
-        onclick="showPage('standings', this)">
-        Standings
-      </button>
-
-    </div>
-  </nav>
-
-  <main>
-
-    <div class="page-title" id="pageTitle">
-      Live Scores
-    </div>
-
-    <div class="date" id="date">
-      Loading...
-    </div>
-
-    <div id="content">
-
-      <div class="status-box">
-
-        <div class="status-title">
-          Connecting to live scores
+      <div>
+        <div class="brand-name">
+          M.<span>awaji</span>livescores
         </div>
 
-        <div class="status-text">
-          Connecting to the football data service...
+        <div class="tagline">
+          LIVE FOOTBALL SCORES
         </div>
-
       </div>
 
     </div>
 
-  </main>
+    <div class="live-indicator">
+      <span class="live-dot"></span>
+      LIVE
+    </div>
 
-  <footer>
-    M.awajilivescores
-  </footer>
-
-
-  <script>
-
-    const API_URL =
-      "https://football-livescore-backend-new.vercel.app/api";
+  </div>
+</header>
 
 
-    const today = new Date();
+<nav>
+  <div class="nav">
 
-    document.getElementById("date").textContent =
-      today.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      });
+    <button class="active" onclick="changePage('live', this)">
+      🔴 Live
+    </button>
+
+    <button onclick="changePage('fixtures', this)">
+      📅 Fixtures
+    </button>
+
+    <button onclick="changePage('results', this)">
+      ✓ Results
+    </button>
+
+    <button onclick="changePage('standings', this)">
+      🏆 Standings
+    </button>
+
+  </div>
+</nav>
 
 
-    async function loadLiveScores() {
+<main>
 
-      const content =
-        document.getElementById("content");
+  <div class="top-row">
 
-      content.innerHTML = `
-        <div class="status-box">
+    <div>
+      <div class="page-title" id="pageTitle">
+        Live Scores
+      </div>
 
-          <div class="status-title">
-            Loading live scores
+      <div class="page-subtitle" id="pageSubtitle">
+        Follow football action as it happens
+      </div>
+    </div>
+
+    <button class="refresh" onclick="loadCurrentPage()">
+      ↻ Refresh
+    </button>
+
+  </div>
+
+
+  <div class="date-bar">
+
+    <button class="date-btn active" onclick="selectDate(0, this)">
+      <strong>TODAY</strong>
+      <small id="todayDate"></small>
+    </button>
+
+    <button class="date-btn" onclick="selectDate(-1, this)">
+      <strong>YESTERDAY</strong>
+      <small id="yesterdayDate"></small>
+    </button>
+
+    <button class="date-btn" onclick="selectDate(1, this)">
+      <strong>TOMORROW</strong>
+      <small id="tomorrowDate"></small>
+    </button>
+
+  </div>
+
+
+  <section id="content"></section>
+
+</main>
+
+
+<footer>
+  <div class="footer-brand">
+    M.<span>awaji</span>livescores
+  </div>
+
+  <div>
+    Live football scores, fixtures, results and standings
+  </div>
+</footer>
+
+
+<script>
+
+const API_BASE =
+  "https://football-livescore-backend-new.vercel.app/api";
+
+let currentPage = "live";
+let selectedDate = new Date();
+
+
+/* DATE FUNCTIONS */
+
+function formatDate(date) {
+
+  return date.toISOString().split("T")[0];
+
+}
+
+function shortDate(date) {
+
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short"
+  });
+
+}
+
+function setupDates() {
+
+  const today = new Date();
+
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  document.getElementById("todayDate").textContent =
+    shortDate(today);
+
+  document.getElementById("yesterdayDate").textContent =
+    shortDate(yesterday);
+
+  document.getElementById("tomorrowDate").textContent =
+    shortDate(tomorrow);
+
+}
+
+
+/* API */
+
+async function fetchAPI(action, extra = "") {
+
+  const url =
+    `${API_BASE}?action=${action}${extra}`;
+
+  const response =
+    await fetch(url);
+
+  const data =
+    await response.json();
+
+  return data;
+
+}
+
+
+/* LIVE */
+
+async function loadLive() {
+
+  showLoading();
+
+  try {
+
+    const data =
+      await fetchAPI("live");
+
+    if (hasAPIError(data)) {
+
+      showAPIError(data);
+
+      return;
+    }
+
+    if (!data.response || data.response.length === 0) {
+
+      showEmpty(
+        "No live matches",
+        "There are currently no live football matches available."
+      );
+
+      return;
+    }
+
+    displayMatches(data.response);
+
+  } catch (error) {
+
+    showConnectionError();
+
+  }
+
+}
+
+
+/* FIXTURES */
+
+async function loadFixtures() {
+
+  showLoading();
+
+  try {
+
+    const date =
+      formatDate(selectedDate);
+
+    const data =
+      await fetchAPI(
+        "fixtures",
+        `&date=${date}`
+      );
+
+    if (hasAPIError(data)) {
+
+      showAPIError(data);
+
+      return;
+    }
+
+    if (!data.response || data.response.length === 0) {
+
+      showEmpty(
+        "No fixtures",
+        "No fixtures were returned for this date."
+      );
+
+      return;
+    }
+
+    displayMatches(data.response);
+
+  } catch (error) {
+
+    showConnectionError();
+
+  }
+
+}
+
+
+/* RESULTS */
+
+async function loadResults() {
+
+  showLoading();
+
+  try {
+
+    const date =
+      formatDate(selectedDate);
+
+    const data =
+      await fetchAPI(
+        "results",
+        `&date=${date}`
+      );
+
+    if (hasAPIError(data)) {
+
+      showAPIError(data);
+
+      return;
+    }
+
+    if (!data.response || data.response.length === 0) {
+
+      showEmpty(
+        "No results",
+        "No completed matches were returned for this date."
+      );
+
+      return;
+    }
+
+    displayMatches(data.response);
+
+  } catch (error) {
+
+    showConnectionError();
+
+  }
+
+}
+
+
+/* PAGE */
+
+function changePage(page, button) {
+
+  currentPage = page;
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  const title =
+    document.getElementById("pageTitle");
+
+  const subtitle =
+    document.getElementById("pageSubtitle");
+
+  if (page === "live") {
+
+    title.textContent = "Live Scores";
+
+    subtitle.textContent =
+      "Follow football action as it happens";
+
+  }
+
+  if (page === "fixtures") {
+
+    title.textContent = "Fixtures";
+
+    subtitle.textContent =
+      "Upcoming football matches";
+
+  }
+
+  if (page === "results") {
+
+    title.textContent = "Results";
+
+    subtitle.textContent =
+      "Completed football matches";
+
+  }
+
+  if (page === "standings") {
+
+    title.textContent = "Standings";
+
+    subtitle.textContent =
+      "League tables and rankings";
+
+    showEmpty(
+      "Standings ready",
+      "Choose a league to view its live standings."
+    );
+
+    return;
+  }
+
+  loadCurrentPage();
+
+}
+
+
+/* CURRENT PAGE */
+
+function loadCurrentPage() {
+
+  if (currentPage === "live") {
+
+    loadLive();
+
+  } else if (currentPage === "fixtures") {
+
+    loadFixtures();
+
+  } else if (currentPage === "results") {
+
+    loadResults();
+
+  }
+
+}
+
+
+/* DATE */
+
+function selectDate(offset, button) {
+
+  const today = new Date();
+
+  selectedDate = new Date(today);
+
+  selectedDate.setDate(
+    today.getDate() + offset
+  );
+
+  document
+    .querySelectorAll(".date-btn")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  if (currentPage === "live") {
+
+    loadLive();
+
+  } else if (currentPage === "fixtures") {
+
+    loadFixtures();
+
+  } else if (currentPage === "results") {
+
+    loadResults();
+
+  }
+
+}
+
+
+/* DISPLAY MATCHES */
+
+function displayMatches(matches) {
+
+  const content =
+    document.getElementById("content");
+
+  const leagues = {};
+
+  matches.forEach(match => {
+
+    const league =
+      match.league?.name || "Football";
+
+    if (!leagues[league]) {
+
+      leagues[league] = {
+        country: match.league?.country || "",
+        matches: []
+      };
+
+    }
+
+    leagues[league].matches.push(match);
+
+  });
+
+
+  let html = "";
+
+
+  Object.keys(leagues).forEach(leagueName => {
+
+    const league =
+      leagues[leagueName];
+
+    html += `
+
+      <div class="league">
+
+        <div class="league-header">
+
+          <div class="league-name">
+            ${escapeHTML(leagueName)}
           </div>
 
-          <div class="status-text">
-            Please wait...
+          <div class="league-country">
+            ${escapeHTML(league.country)}
           </div>
 
         </div>
+    `;
+
+
+    league.matches.forEach(match => {
+
+      const home =
+        match.teams?.home?.name || "Home";
+
+      const away =
+        match.teams?.away?.name || "Away";
+
+      const homeScore =
+        match.goals?.home ?? "-";
+
+      const awayScore =
+        match.goals?.away ?? "-";
+
+      const status =
+        match.fixture?.status?.short || "";
+
+      const elapsed =
+        match.fixture?.status?.elapsed;
+
+      let statusText = status;
+
+      if (elapsed) {
+
+        statusText =
+          `${elapsed}'`;
+
+      }
+
+
+      html += `
+
+        <div class="match">
+
+          <div class="team home">
+            ${escapeHTML(home)}
+          </div>
+
+          <div class="score">
+
+            <div class="score-main">
+              ${homeScore} - ${awayScore}
+            </div>
+
+            <div class="${
+              isLiveStatus(status)
+              ? "status-live"
+              : "status-finished"
+            }">
+
+              ${
+                isLiveStatus(status)
+                ? "● " + escapeHTML(statusText)
+                : escapeHTML(statusText)
+              }
+
+            </div>
+
+          </div>
+
+          <div class="team away">
+            ${escapeHTML(away)}
+          </div>
+
+        </div>
+
       `;
 
-      try {
+    });
 
-        const response =
-          await fetch(API_URL);
 
-        const data =
-          await response.json();
+    html += `
+      </div>
+    `;
 
+  });
 
-        if (!response.ok) {
-          throw new Error("Server error");
-        }
 
+  content.innerHTML = html;
 
-        if (
-          data.errors &&
-          Object.keys(data.errors).length > 0
-        ) {
+}
 
-          const errorMessage =
-            Object.values(data.errors).join(", ");
 
-          content.innerHTML = `
-            <div class="status-box">
+/* HELPERS */
 
-              <div class="status-title">
-                Live scores unavailable
-              </div>
+function isLiveStatus(status) {
 
-              <div class="status-text">
-                ${escapeHtml(errorMessage)}
-              </div>
+  return [
+    "1H",
+    "2H",
+    "HT",
+    "ET",
+    "P",
+    "LIVE"
+  ].includes(status);
 
-              <button
-                class="retry-button"
-                onclick="loadLiveScores()">
-                Try Again
-              </button>
+}
 
-            </div>
-          `;
 
-          return;
-        }
+function hasAPIError(data) {
 
+  return data &&
+    data.errors &&
+    Object.keys(data.errors).length > 0;
 
-        if (
-          !data.response ||
-          data.response.length === 0
-        ) {
+}
 
-          content.innerHTML = `
-            <div class="status-box">
 
-              <div class="status-title">
-                No live matches right now
-              </div>
+function showAPIError(data) {
 
-              <div class="status-text">
-                There are currently no live matches available.
-              </div>
+  const errors =
+    Object.values(data.errors || {});
 
-              <button
-                class="retry-button"
-                onclick="loadLiveScores()">
-                Refresh
-              </button>
+  showEmpty(
+    "Live scores unavailable",
+    errors.join(", ") ||
+    "The football data service is currently unavailable."
+  );
 
-            </div>
-          `;
+}
 
-          return;
-        }
 
+function showConnectionError() {
 
-        displayMatches(data.response);
+  showEmpty(
+    "Connection error",
+    "We could not connect to the football data service. Please try again."
+  );
 
-      } catch (error) {
+}
 
-        content.innerHTML = `
-          <div class="status-box">
 
-            <div class="status-title">
-              Connection error
-            </div>
+function showEmpty(title, message) {
 
-            <div class="status-text">
-              We could not connect to the live scores service.
-            </div>
+  document.getElementById("content").innerHTML = `
 
-            <button
-              class="retry-button"
-              onclick="loadLiveScores()">
-              Try Again
-            </button>
+    <div class="status">
 
-          </div>
-        `;
+      <div class="status-icon">
+        ⚽
+      </div>
 
-      }
+      <h2>
+        ${escapeHTML(title)}
+      </h2>
 
-    }
+      <p>
+        ${escapeHTML(message)}
+      </p>
 
+      <button class="retry"
+        onclick="loadCurrentPage()">
+        Try Again
+      </button>
 
-    function displayMatches(matches) {
+    </div>
 
-      const content =
-        document.getElementById("content");
+  `;
 
-      const leagues = {};
+}
 
 
-      matches.forEach(match => {
+function showLoading() {
 
-        const leagueName =
-          match.league?.name || "Unknown League";
+  document.getElementById("content").innerHTML = `
 
-        if (!leagues[leagueName]) {
-          leagues[leagueName] = [];
-        }
+    <div class="status">
 
-        leagues[leagueName].push(match);
+      <div class="status-icon">
+        ⚡
+      </div>
 
-      });
+      <h2>
+        Loading scores
+      </h2>
 
+      <div class="loading">
 
-      let html = "";
+        <span></span>
+        <span></span>
+        <span></span>
 
+      </div>
 
-      Object.keys(leagues).forEach(leagueName => {
+    </div>
 
-        html += `
-          <div class="league">
+  `;
 
-            <div class="league-header">
-              ${escapeHtml(leagueName)}
-            </div>
-        `;
+}
 
 
-        leagues[leagueName].forEach(match => {
+function escapeHTML(value) {
 
-          const home =
-            match.teams?.home?.name || "Home";
+  const div =
+    document.createElement("div");
 
-          const away =
-            match.teams?.away?.name || "Away";
+  div.textContent =
+    String(value ?? "");
 
-          const homeScore =
-            match.goals?.home ?? 0;
+  return div.innerHTML;
 
-          const awayScore =
-            match.goals?.away ?? 0;
+}
 
-          const status =
-            match.fixture?.status?.short || "LIVE";
 
+/* START */
 
-          html += `
-            <div class="match">
+setupDates();
 
-              <div class="team home">
-                ${escapeHtml(home)}
-              </div>
+loadLive();
 
-              <div class="score">
-
-                <div class="score-number">
-                  ${homeScore} - ${awayScore}
-                </div>
-
-                <div class="match-status">
-                  ${escapeHtml(status)}
-                </div>
-
-              </div>
-
-              <div class="team away">
-                ${escapeHtml(away)}
-              </div>
-
-            </div>
-          `;
-
-        });
-
-
-        html += `
-          </div>
-        `;
-
-      });
-
-
-      content.innerHTML = html;
-
-    }
-
-
-    function showPage(page, button) {
-
-      document
-        .querySelectorAll(".nav-button")
-        .forEach(btn => {
-          btn.classList.remove("active");
-        });
-
-
-      button.classList.add("active");
-
-
-      const title =
-        document.getElementById("pageTitle");
-
-
-      if (page === "live") {
-
-        title.textContent = "Live Scores";
-
-        loadLiveScores();
-
-      }
-
-
-      else if (page === "fixtures") {
-
-        title.textContent = "Fixtures";
-
-        document.getElementById("content").innerHTML = `
-          <div class="status-box">
-
-            <div class="status-title">
-              Fixtures
-            </div>
-
-            <div class="status-text">
-              Fixtures will be loaded from the football data service.
-            </div>
-
-          </div>
-        `;
-
-      }
-
-
-      else if (page === "results") {
-
-        title.textContent = "Results";
-
-        document.getElementById("content").innerHTML = `
-          <div class="status-box">
-
-            <div class="status-title">
-              Results
-            </div>
-
-            <div class="status-text">
-              Results will be loaded from the football data service.
-            </div>
-
-          </div>
-        `;
-
-      }
-
-
-      else if (page === "standings") {
-
-        title.textContent = "Standings";
-
-        document.getElementById("content").innerHTML = `
-          <div class="status-box">
-
-            <div class="status-title">
-              Standings
-            </div>
-
-            <div class="status-text">
-              Standings will be loaded from the football data service.
-            </div>
-
-          </div>
-        `;
-
-      }
-
-    }
-
-
-    function escapeHtml(text) {
-
-      const div =
-        document.createElement("div");
-
-      div.textContent = text;
-
-      return div.innerHTML;
-
-    }
-
-
-    loadLiveScores();
-
-  </script>
+</script>
 
 </body>
 </html>
