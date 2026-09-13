@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Modu Live Scores</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #111827;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 18px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .live-badge {
+      background: #dc2626;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 62px;
+      z-index: 9;
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      overflow-x: auto;
+    }
+
+    .nav-button {
+      border: none;
+      background: none;
+      padding: 15px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #6b7280;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-button.active {
+      color: #111827;
+      border-bottom: 3px solid #111827;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px 12px 50px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .date {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .status-box {
+      background: white;
+      border-radius: 12px;
+      padding: 25px 18px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .status-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .status-text {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .retry-button {
+      margin-top: 18px;
+      border: none;
+      background: #111827;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .league {
+      margin-bottom: 15px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .league-header {
+      background: #111827;
+      color: white;
+      padding: 12px 15px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .match {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .match:last-child {
+      border-bottom: none;
+    }
+
+    .team {
+      width: 35%;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .team.home {
+      text-align: right;
+    }
+
+    .team.away {
+      text-align: left;
+    }
+
+    .score {
+      width: 20%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .score-number {
+      font-size: 18px;
+    }
+
+    .match-status {
+      font-size: 11px;
+      color: #dc2626;
+      margin-top: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    @media (min-width: 700px) {
+      main {
+        padding-top: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">Modu Live Scores</div>
+      <div class="live-badge">LIVE</div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+
+      <button class="nav-button active" onclick="showPage('live', this)">
+        Live
+      </button>
+
+      <button class="nav-button" onclick="showPage('fixtures', this)">
+        Fixtures
+      </button>
+
+      <button class="nav-button" onclick="showPage('results', this)">
+        Results
+      </button>
+
+      <button class="nav-button" onclick="showPage('standings', this)">
+        Standings
+      </button>
+
+    </div>
+  </nav>
+
+  <main>
+
+    <div class="page-title" id="pageTitle">
+      Live Scores
+    </div>
+
+    <div class="date" id="date">
+      Loading...
+    </div>
+
+    <div id="content">
+
+      <div class="status-box">
+
+        <div class="status-title">
+          Connecting to live scores
+        </div>
+
+        <div class="status-text">
+          Connecting to the football data service...
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    Modu Live Scores
+  </footer>
+
+
+  <script>
+
+    const API_URL =
+      "https://football-livescore-backend-new.vercel.app/api";
+
+
+    const today = new Date();
+
+    document.getElementById("date").textContent =
+      today.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+
+
+    async function loadLiveScores() {
+
+      const content =
+        document.getElementById("content");
+
+      content.innerHTML = `
+        <div class="status-box">
+          <div class="status-title">
+            Loading live scores
+          </div>
+
+          <div class="status-text">
+            Please wait...
+          </div>
+        </div>
+      `;
+
+      try {
+
+        const response =
+          await fetch(API_URL);
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+          throw new Error("Server error");
+        }
+
+
+        if (
+          data.errors &&
+          Object.keys(data.errors).length > 0
+        ) {
+
+          const errorMessage =
+            Object.values(data.errors).join(", ");
+
+          content.innerHTML = `
+            <div class="status-box">
+
+              <div class="status-title">
+                Live scores unavailable
+              </div>
+
+              <div class="status-text">
+                ${escapeHtml(errorMessage)}
+              </div>
+
+              <button
+                class="retry-button"
+                onclick="loadLiveScores()">
+                Try Again
+              </button>
+
+            </div>
+          `;
+
+          return;
+        }
+
+
+        if (
+          !data.response ||
+          data.response.length === 0
+        ) {
+
+          content.innerHTML = `
+            <div class="status-box">
+
+              <div class="status-title">
+                No live matches right now
+              </div>
+
+              <div class="status-text">
+                There are currently no live matches available.
+              </div>
+
+              <button
+                class="retry-button"
+                onclick="loadLiveScores()">
+                Refresh
+              </button>
+
+            </div>
+          `;
+
+          return;
+        }
+
+
+        displayMatches(data.response);
+
+      } catch (error) {
+
+        content.innerHTML = `
+          <div class="status-box">
+
+            <div class="status-title">
+              Connection error
+            </div>
+
+            <div class="status-text">
+              We could not connect to the live scores service.
+            </div>
+
+            <button
+              class="retry-button"
+              onclick="loadLiveScores()">
+              Try Again
+            </button>
+
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    function displayMatches(matches) {
+
+      const content =
+        document.getElementById("content");
+
+      const leagues = {};
+
+
+      matches.forEach(match => {
+
+        const leagueName =
+          match.league?.name || "Unknown League";
+
+        if (!leagues[leagueName]) {
+          leagues[leagueName] = [];
+        }
+
+        leagues[leagueName].push(match);
+
+      });
+
+
+      let html = "";
+
+
+      Object.keys(leagues).forEach(leagueName => {
+
+        html += `
+          <div class="league">
+
+            <div class="league-header">
+              ${escapeHtml(leagueName)}
+            </div>
+        `;
+
+
+        leagues[leagueName].forEach(match => {
+
+          const home =
+            match.teams?.home?.name || "Home";
+
+          const away =
+            match.teams?.away?.name || "Away";
+
+          const homeScore =
+            match.goals?.home ?? 0;
+
+          const awayScore =
+            match.goals?.away ?? 0;
+
+          const status =
+            match.fixture?.status?.short || "LIVE";
+
+
+          html += `
+            <div class="match">
+
+              <div class="team home">
+                ${escapeHtml(home)}
+              </div>
+
+              <div class="score">
+
+                <div class="score-number">
+                  ${homeScore} - ${awayScore}
+                </div>
+
+                <div class="match-status">
+                  ${escapeHtml(status)}
+                </div>
+
+              </div>
+
+              <div class="team away">
+                ${escapeHtml(away)}
+              </div>
+
+            </div>
+          `;
+
+        });
+
+
+        html += `</div>`;
+
+      });
+
+
+      content.innerHTML = html;
+
+    }
+
+
+    function showPage(page, button) {
+
+      document
+        .querySelectorAll(".nav-button")
+        .forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+
+      button.classList.add("active");
+
+
+      const title =
+        document.getElementById("pageTitle");
+
+
+      if (page === "live") {
+
+        title.textContent = "Live Scores";
+
+        loadLiveScores();
+
+      }
+
+      else if (page === "fixtures") {
+
+        title.textContent = "Fixtures";
+
+        document.getElementById("content").innerHTML = `
+          <div class="status-box">
+
+            <div class="status-title">
+              Fixtures
+            </div>
+
+            <div class="status-text">
+              The fixtures section will connect to the football API.
+            </div>
+
+          </div>
+        `;
+
+      }
+
+      else if (page === "results") {
+
+        title.textContent = "Results";
+
+        document.getElementById("content").innerHTML = `
+          <div class="status-box">
+
+            <div class="status-title">
+              Results
+            </div>
+
+            <div class="status-text">
+              The results section will connect to the football API.
+            </div>
+
+          </div>
+        `;
+
+      }
+
+      else if (page === "standings") {
+
+        title.textContent = "Standings";
+
+        document.getElementById("content").innerHTML = `
+          <div class="status-box">
+
+            <div class="status-title">
+              Standings
+            </div>
+
+            <div class="status-text">
+              The standings section will connect to the football API.
+            </div>
+
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    function escapeHtml(text) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent = text;
+
+      return div.innerHTML;
+
+    }
+
+
+    loadLiveScores();
+
+  </script>
+
+</body>
+</html>
