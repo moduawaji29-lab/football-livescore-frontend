@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Modu Live Scores</title>
+  <title>M.awajilivescores</title>
 
   <style>
     * {
@@ -37,7 +37,7 @@
     }
 
     .logo {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: bold;
     }
 
@@ -206,27 +206,42 @@
 
   <header>
     <div class="header-inner">
-      <div class="logo">Modu Live Scores</div>
-      <div class="live-badge">LIVE</div>
+
+      <div class="logo">
+        M.awajilivescores
+      </div>
+
+      <div class="live-badge">
+        LIVE
+      </div>
+
     </div>
   </header>
 
   <nav>
     <div class="nav-inner">
 
-      <button class="nav-button active" onclick="showPage('live', this)">
+      <button
+        class="nav-button active"
+        onclick="showPage('live', this)">
         Live
       </button>
 
-      <button class="nav-button" onclick="showPage('fixtures', this)">
+      <button
+        class="nav-button"
+        onclick="showPage('fixtures', this)">
         Fixtures
       </button>
 
-      <button class="nav-button" onclick="showPage('results', this)">
+      <button
+        class="nav-button"
+        onclick="showPage('results', this)">
         Results
       </button>
 
-      <button class="nav-button" onclick="showPage('standings', this)">
+      <button
+        class="nav-button"
+        onclick="showPage('standings', this)">
         Standings
       </button>
 
@@ -262,7 +277,7 @@
   </main>
 
   <footer>
-    Modu Live Scores
+    M.awajilivescores
   </footer>
 
 
@@ -290,6 +305,7 @@
 
       content.innerHTML = `
         <div class="status-box">
+
           <div class="status-title">
             Loading live scores
           </div>
@@ -297,6 +313,7 @@
           <div class="status-text">
             Please wait...
           </div>
+
         </div>
       `;
 
@@ -487,7 +504,9 @@
         });
 
 
-        html += `</div>`;
+        html += `
+          </div>
+        `;
 
       });
 
@@ -521,6 +540,7 @@
 
       }
 
+
       else if (page === "fixtures") {
 
         title.textContent = "Fixtures";
@@ -533,13 +553,14 @@
             </div>
 
             <div class="status-text">
-              The fixtures section will connect to the football API.
+              Fixtures will be loaded from the football data service.
             </div>
 
           </div>
         `;
 
       }
+
 
       else if (page === "results") {
 
@@ -553,13 +574,14 @@
             </div>
 
             <div class="status-text">
-              The results section will connect to the football API.
+              Results will be loaded from the football data service.
             </div>
 
           </div>
         `;
 
       }
+
 
       else if (page === "standings") {
 
@@ -573,7 +595,7 @@
             </div>
 
             <div class="status-text">
-              The standings section will connect to the football API.
+              Standings will be loaded from the football data service.
             </div>
 
           </div>
