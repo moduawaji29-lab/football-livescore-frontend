@@ -205,6 +205,16 @@ main {
   gap: 8px;
   padding: 22px 18px;
   border-top: 1px solid #edf0f3;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.match:hover {
+  background: #f7f9fb;
+}
+
+.match:active {
+  background: #edf2f8;
 }
 
 .team {
@@ -346,6 +356,191 @@ main {
   font-weight: 900;
 }
 
+/* ====================================================
+   MATCH DETAILS
+   ==================================================== */
+
+.match-details {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e1e4e9;
+  overflow: hidden;
+}
+
+.back-button {
+  margin: 18px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #edf1f6;
+  color: #071a33;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.details-header {
+  text-align: center;
+  padding: 10px 20px 25px;
+}
+
+.details-league {
+  font-size: 15px;
+  font-weight: 800;
+  color: #626b78;
+}
+
+.details-country {
+  font-size: 13px;
+  color: #929aa5;
+  margin-top: 5px;
+}
+
+.details-status {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #edf1f6;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.details-status.live {
+  background: #fff0f1;
+  color: #e21d35;
+}
+
+.details-teams {
+  display: grid;
+  grid-template-columns: 1fr 90px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 25px 20px 35px;
+  border-top: 1px solid #edf0f3;
+}
+
+.details-team {
+  text-align: center;
+}
+
+.details-team img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
+
+.details-team h2 {
+  font-size: 17px;
+  margin: 12px 0 8px;
+}
+
+.details-score {
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.details-vs {
+  text-align: center;
+  color: #929aa5;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.details-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #edf0f3;
+}
+
+.details-info div {
+  padding: 18px 10px;
+  text-align: center;
+  border-right: 1px solid #edf0f3;
+}
+
+.details-info div:last-child {
+  border-right: 0;
+}
+
+.details-info strong {
+  display: block;
+  font-size: 12px;
+  color: #7b8490;
+  margin-bottom: 7px;
+}
+
+.details-info span {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.details-section {
+  margin-top: 18px;
+  background: white;
+  border: 1px solid #e1e4e9;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.details-section-title {
+  background: #edf1f6;
+  padding: 15px 18px;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: 1fr 55px 1fr;
+  align-items: center;
+  padding: 13px 15px;
+  border-top: 1px solid #edf0f3;
+  font-size: 13px;
+}
+
+.event-home {
+  text-align: right;
+}
+
+.event-away {
+  text-align: left;
+}
+
+.event-time {
+  text-align: center;
+  font-weight: 900;
+}
+
+.stat-row {
+  padding: 14px 18px;
+  border-top: 1px solid #edf0f3;
+}
+
+.stat-names {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.stat-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.no-data {
+  padding: 25px;
+  text-align: center;
+  color: #858d99;
+  font-weight: 700;
+}
+
 footer {
   text-align: center;
   padding: 30px 15px 45px;
@@ -388,6 +583,38 @@ footer {
 
   .league-header {
     font-size: 16px;
+  }
+
+  .details-teams {
+    grid-template-columns: 1fr 65px 1fr;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .details-team img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .details-team h2 {
+    font-size: 14px;
+  }
+
+  .details-score {
+    font-size: 28px;
+  }
+
+  .details-info {
+    grid-template-columns: 1fr;
+  }
+
+  .details-info div {
+    border-right: 0;
+    border-bottom: 1px solid #edf0f3;
+  }
+
+  .details-info div:last-child {
+    border-bottom: 0;
   }
 }
 </style>
@@ -1198,9 +1425,16 @@ function displayMatches(
             : "";
 
 
+        const matchId =
+          match.fixture?.id;
+
+
         html += `
 
-          <div class="match">
+          <div
+            class="match"
+            onclick="openMatchDetails(${Number(matchId)})"
+            title="View match details">
 
             <div class="team home">
               ${escapeHTML(home)}
@@ -1240,6 +1474,621 @@ function displayMatches(
     "content"
   ).innerHTML =
     html;
+
+}
+
+
+/*
+====================================================
+MATCH DETAILS
+====================================================
+*/
+
+async function openMatchDetails(matchId) {
+
+  if (!matchId) {
+
+    return;
+
+  }
+
+
+  const content =
+    document.getElementById(
+      "content"
+    );
+
+
+  content.innerHTML = `
+
+    <div class="loading">
+
+      Loading match details...
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const data =
+      await fetchAPI(
+        "match",
+        `&id=${encodeURIComponent(matchId)}`
+      );
+
+
+    if (hasAPIError(data)) {
+
+      showAPIError(data);
+      return;
+
+    }
+
+
+    const match =
+      data.response?.[0];
+
+
+    if (!match) {
+
+      showEmpty(
+        "No match details available."
+      );
+
+      return;
+
+    }
+
+
+    renderMatchDetails(match);
+
+  }
+
+  catch (error) {
+
+    showConnectionError(error);
+
+  }
+
+}
+
+
+/*
+====================================================
+RENDER MATCH DETAILS
+====================================================
+*/
+
+function renderMatchDetails(match) {
+
+  const fixture =
+    match.fixture ||
+    {};
+
+  const league =
+    match.league ||
+    {};
+
+  const teams =
+    match.teams ||
+    {};
+
+  const goals =
+    match.goals ||
+    {};
+
+  const home =
+    teams.home ||
+    {};
+
+  const away =
+    teams.away ||
+    {};
+
+  const status =
+    fixture.status ||
+    {};
+
+
+  const live =
+    isLiveStatus(
+      status.short
+    );
+
+
+  let statusText =
+    status.long ||
+    status.short ||
+    "Match";
+
+
+  if (live) {
+
+    statusText =
+      status.elapsed
+        ? `${status.elapsed}' LIVE`
+        : "LIVE";
+
+  }
+
+
+  let html = `
+
+    <button
+      class="back-button"
+      onclick="backToMatches()">
+
+      ← Back to Matches
+
+    </button>
+
+
+    <div class="match-details">
+
+      <div class="details-header">
+
+        <div class="details-league">
+          ${escapeHTML(
+            league.name ||
+            "Football"
+          )}
+        </div>
+
+        <div class="details-country">
+          ${escapeHTML(
+            league.country ||
+            ""
+          )}
+        </div>
+
+        <div class="details-status ${live ? "live" : ""}">
+          ${escapeHTML(
+            statusText
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="details-teams">
+
+        <div class="details-team">
+
+          ${
+            home.logo
+              ? `
+                <img
+                  src="${escapeAttribute(home.logo)}"
+                  alt="">
+              `
+              : ""
+          }
+
+          <h2>
+            ${escapeHTML(
+              home.name ||
+              "Home Team"
+            )}
+          </h2>
+
+          <div class="details-score">
+            ${goals.home ?? "-"}
+          </div>
+
+        </div>
+
+
+        <div class="details-vs">
+          VS
+        </div>
+
+
+        <div class="details-team">
+
+          ${
+            away.logo
+              ? `
+                <img
+                  src="${escapeAttribute(away.logo)}"
+                  alt="">
+              `
+              : ""
+          }
+
+          <h2>
+            ${escapeHTML(
+              away.name ||
+              "Away Team"
+            )}
+          </h2>
+
+          <div class="details-score">
+            ${goals.away ?? "-"}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="details-info">
+
+        <div>
+
+          <strong>🏟️ VENUE</strong>
+
+          <span>
+            ${escapeHTML(
+              fixture.venue?.name ||
+              "Not available"
+            )}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>📅 DATE</strong>
+
+          <span>
+            ${
+              fixture.date
+                ? new Date(
+                    fixture.date
+                  ).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric"
+                    }
+                  )
+                : "Not available"
+            }
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong>⏱️ STATUS</strong>
+
+          <span>
+            ${escapeHTML(
+              status.long ||
+              status.short ||
+              "Not available"
+            )}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  /*
+  ====================================================
+  EVENTS
+  ====================================================
+  */
+
+  const events =
+    match.events ||
+    [];
+
+
+  if (events.length) {
+
+    html += `
+
+      <div class="details-section">
+
+        <div class="details-section-title">
+          ⚽ Match Events
+        </div>
+
+    `;
+
+
+    events.forEach(event => {
+
+      const minute =
+        event.time?.elapsed != null
+          ? `${event.time.elapsed}'`
+          : "";
+
+
+      const player =
+        event.player?.name ||
+        "";
+
+
+      const assist =
+        event.assist?.name ||
+        "";
+
+
+      const type =
+        event.type ||
+        "";
+
+
+      const detail =
+        event.detail ||
+        "";
+
+
+      let icon =
+        "•";
+
+
+      if (type === "Goal") {
+        icon = "⚽";
+      }
+
+      else if (type === "Card") {
+
+        if (
+          detail
+            .toLowerCase()
+            .includes("red")
+        ) {
+          icon = "🟥";
+        }
+
+        else {
+          icon = "🟨";
+        }
+
+      }
+
+      else if (
+        type === "subst"
+      ) {
+
+        icon = "🔄";
+
+      }
+
+
+      const eventText =
+        `${icon} ${player}${assist ? ` • Assist: ${assist}` : ""}${detail ? ` • ${detail}` : ""}`;
+
+
+      if (
+        event.team?.id ===
+        home.id
+      ) {
+
+        html += `
+
+          <div class="event-row">
+
+            <div class="event-home">
+              ${escapeHTML(eventText)}
+            </div>
+
+            <div class="event-time">
+              ${escapeHTML(minute)}
+            </div>
+
+            <div class="event-away">
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+      else {
+
+        html += `
+
+          <div class="event-row">
+
+            <div class="event-home">
+            </div>
+
+            <div class="event-time">
+              ${escapeHTML(minute)}
+            </div>
+
+            <div class="event-away">
+              ${escapeHTML(eventText)}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+    });
+
+
+    html += `</div>`;
+
+  }
+
+
+  /*
+  ====================================================
+  STATISTICS
+  ====================================================
+  */
+
+  const statistics =
+    match.statistics ||
+    [];
+
+
+  if (statistics.length >= 2) {
+
+    const homeStats =
+      statistics.find(
+        item =>
+          item.team?.id === home.id
+      );
+
+    const awayStats =
+      statistics.find(
+        item =>
+          item.team?.id === away.id
+      );
+
+
+    const homeStatsList =
+      homeStats?.statistics ||
+      [];
+
+    const awayStatsList =
+      awayStats?.statistics ||
+      [];
+
+
+    if (
+      homeStatsList.length ||
+      awayStatsList.length
+    ) {
+
+      html += `
+
+        <div class="details-section">
+
+          <div class="details-section-title">
+            📊 Match Statistics
+          </div>
+
+      `;
+
+
+      const statNames = [
+        ...new Set(
+          homeStatsList
+            .map(item => item.type)
+            .concat(
+              awayStatsList.map(
+                item => item.type
+              )
+            )
+        )
+      ];
+
+
+      statNames.forEach(statName => {
+
+        const homeStat =
+          homeStatsList.find(
+            item =>
+              item.type === statName
+          );
+
+        const awayStat =
+          awayStatsList.find(
+            item =>
+              item.type === statName
+          );
+
+
+        html += `
+
+          <div class="stat-row">
+
+            <div class="stat-names">
+
+              <span>
+                ${escapeHTML(
+                  home.name ||
+                  "Home"
+                )}
+              </span>
+
+              <span>
+                ${escapeHTML(
+                  away.name ||
+                  "Away"
+                )}
+              </span>
+
+            </div>
+
+
+            <div class="stat-values">
+
+              <span>
+                ${escapeHTML(
+                  String(
+                    homeStat?.value ??
+                    "-"
+                  )
+                )}
+              </span>
+
+              <span>
+                ${escapeHTML(
+                  String(
+                    awayStat?.value ??
+                    "-"
+                  )
+                )}
+              </span>
+
+            </div>
+
+            <div style="
+              text-align:center;
+              margin-top:6px;
+              font-size:12px;
+              color:#7b8490;
+              font-weight:700;
+            ">
+
+              ${escapeHTML(
+                statName
+              )}
+
+            </div>
+
+          </div>
+
+        `;
+
+      });
+
+
+      html += `</div>`;
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "content"
+  ).innerHTML =
+    html;
+
+}
+
+
+/*
+====================================================
+BACK TO MATCHES
+====================================================
+*/
+
+function backToMatches() {
+
+  refreshCurrentPage();
 
 }
 
@@ -1850,6 +2699,23 @@ function escapeAttribute(value) {
 
 /*
 ====================================================
+AUTOMATIC LIVE SCORE REFRESH
+====================================================
+*/
+
+setInterval(() => {
+
+  if (currentPage === "live") {
+
+    loadLive();
+
+  }
+
+}, 30000);
+
+
+/*
+====================================================
 START APPLICATION
 ====================================================
 */
@@ -1862,16 +2728,3 @@ loadLive();
 
 </body>
 </html>
-/*
-====================================================
-AUTOMATIC LIVE SCORE REFRESH
-====================================================
-*/
-
-setInterval(() => {
-
-  if (currentPage === "live") {
-    loadLive();
-  }
-
-}, 30000);
