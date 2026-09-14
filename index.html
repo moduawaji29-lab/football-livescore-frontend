@@ -1862,3 +1862,16 @@ loadLive();
 
 </body>
 </html>
+/*
+====================================================
+AUTOMATIC LIVE SCORE REFRESH
+====================================================
+*/
+
+setInterval(() => {
+
+  if (currentPage === "live") {
+    loadLive();
+  }
+
+}, 30000);
